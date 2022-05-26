@@ -34,21 +34,31 @@ const App = () => {
         phonebookService
           .update(personFound.id, changedPerson)
           .then((response) => {
-            setErrorMessage({
-              message: `Person ${response.name} number changed in ${response.number}`,
-              color: "success",
-            })
-            setTimeout(() => {
-              setErrorMessage(null)
-            }, 5000)
-            setPersons(
-              persons.map((n) => (n.id !== personFound.id ? n : response))
-            )
+            if (response) {
+              setErrorMessage({
+                message: `Person ${response.name} number changed in ${response.number}`,
+                color: "success",
+              })
+              setTimeout(() => {
+                setErrorMessage(null)
+              }, 5000)
+              setPersons(
+                persons.map((n) => (n.id !== personFound.id ? n : response))
+              )
+            } else {
+              setPersons(persons.filter((n) => n.id !== personFound.id))
+              setErrorMessage({
+                message: `person '${personFound.name}' was already deleted from server`,
+                color: "error",
+              })
+              setTimeout(() => {
+                setErrorMessage(null)
+              }, 5000)
+            }
           })
           .catch((error) => {
-            setPersons(persons.filter((n) => n.id !== personFound.id))
             setErrorMessage({
-              message: `person '${personFound.name}' was already deleted from server`,
+              message: `${error.response.data.error.message}`,
               color: "error",
             })
             setTimeout(() => {
@@ -58,16 +68,27 @@ const App = () => {
       }
     } else {
       const newPerson = { name: newName, number: newNumber }
-      phonebookService.create(newPerson).then((response) => {
-        setErrorMessage({
-          message: `Added ${response.name}`,
-          color: "success",
+      phonebookService
+        .create(newPerson)
+        .then((response) => {
+          setErrorMessage({
+            message: `Added ${response.name}`,
+            color: "success",
+          })
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+          setPersons(persons.concat(response))
         })
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
-        setPersons(persons.concat(response))
-      })
+        .catch((error) => {
+          setErrorMessage({
+            message: `${error.response.data.error.message}`,
+            color: "error",
+          })
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        })
     }
     setNewName("")
     setNewNumber("")
