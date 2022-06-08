@@ -14,8 +14,7 @@ const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
 const typeDefs = require('./schema')
 const resolvers = require('./resolvers')
 
-const MONGODB_URI =
-  'mongodb+srv://crystal:f1qKRF3RSLGSKhsw@cluster0.puhs5.mongodb.net/library?retryWrites=true&w=majority'
+const MONGODB_URI = 'mongodb+srv://...'
 
 mongoose
   .connect(MONGODB_URI)
