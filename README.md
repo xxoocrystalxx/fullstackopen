@@ -9,7 +9,7 @@
 > testing, configuration and environment management, and the use of MongoDB for
 > storing the application’s data.
 
-## Course Exercises
+## Course
 
 ### Part 0 Fundamentals of Web apps
 
